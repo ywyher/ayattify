@@ -1,101 +1,180 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
+import React, { useEffect, useState, useRef } from 'react';
+import { DndContext } from '@dnd-kit/core';
+import type { DragEndEvent } from '@dnd-kit/core';
+import Draggable from '@/components/draggable';
+import { createSnapModifier, restrictToParentElement } from '@dnd-kit/modifiers';
+import Selecto from 'react-selecto';
+
+export type Item = {
+  id: string,
+  position: {
+    x: number,
+    y: number,
+  },
+  size: {
+    width: string | number,
+    height: string | number,
+  },
+  rotation: number, // Add rotation property
+  content: string 
+}
+
+export type Selected = {
+  id: Item['id']
+}
+
+export type Hover = {
+  id: Item['id']
+}
+
+export default function DraggableDemo() {
+  const [items, setItems] = useState<Item[]>([
+   {
+      id: "draggable-1",
+      position: { x: 0, y: 0 },
+      size: { width: 'auto', height: 'auto' },
+      rotation: 0, // Initialize rotation to 0
+      content: 'test',
+    },
+   {
+      id: `draggable-2`,
+      position: { x: 50, y: 50 },
+      size: { width: 'auto', height: 'auto' },
+      rotation: 0,
+      content: 'test',
+    },
+   {
+      id: `draggable-3`,
+      position: { x: 100, y: 100 },
+      size: { width: 'auto', height: 'auto' },
+      rotation: 0,
+      content: 'test',
+    },
+   {
+      id: `draggable-4`,
+      position: { x: 150, y: 150 },
+      size: { width: 'auto', height: 'auto' },
+      rotation: 0,
+      content: 'test',
+    },
+  ]);
+
+  const [selected, setSelected] = useState<Selected[]>([]);
+  const [hover, setHover] = useState<Hover | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    console.log(items)
+  }, [items])
+
+  const gridSize = 20; // pixels
+  const snapToGridModifier = createSnapModifier(gridSize);
+
+  // Add click outside event listener
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      // If we clicked inside a draggable component, the event will be handled there
+      // This is for clicking outside of any draggable component
+      const clickedDraggable = (event.target as Element).closest('[data-draggable="true"]');
+      
+      if (!clickedDraggable) {
+        // Clear selection when clicking outside
+        setSelected([]);
+      }
+    }
+
+    // Add the event listener to the document
+    document.addEventListener('mousedown', handleClickOutside);
+    
+    // Clean up the event listener
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, delta } = event;
+    
+    setItems(prev => prev.map(item => {
+      if (item.id === active.id) {
+        return {
+          ...item,
+          position: {
+            x: item.position.x + delta.x,
+            y: item.position.y + delta.y
+          }
+        };
+      }
+      return item;
+    }));
+  };
+  
+  // Add a function to handle resize
+  const handleResize = (id: Item['id'], size: Item['size']) => {
+    setItems(prev => prev.map(item => {
+      if (item.id === id) {
+        return {
+          ...item,
+          size
+        };
+      }
+      return item;
+    }));
+  };
+
+  // Add a function to handle content change
+  const handleContentChange = (id: Item['id'], content: string) => {
+    setItems(prev => prev.map(item => {
+      if (item.id === id) {
+        return {
+          ...item,
+          content
+        };
+      }
+      return item;
+    }));
+  };
+
+  // Add a function to handle rotation
+  const handleRotate = (id: Item['id'], angle: number) => {
+    setItems(prev => prev.map(item => {
+      if (item.id === id) {
+        return {
+          ...item,
+          rotation: angle
+        };
+      }
+      return item;
+    }));
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+    <>
+      <div ref={containerRef} className='big relative w-full h-screen bg-black'>
+        <DndContext onDragEnd={handleDragEnd} modifiers={[restrictToParentElement]}>
+          {items.map(item => (
+            <Draggable
+              className="cube"
+              key={item.id} 
+              id={item.id} 
+              position={item.position}
+              size={item.size}
+              rotation={item.rotation}
+              onResize={(size) => handleResize(item.id, size)}
+              onRotate={(angle) => handleRotate(item.id, angle)}
+              setSelected={setSelected}
+              setHover={setHover}
+              isSelected={selected.some(s => s.id === item.id)}
+              isHover={hover ? hover.id === item.id : false}
+              content={item.content}
+              onContentChange={(content) => handleContentChange(item.id, content)}
+              editable={true}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          ))}
+        </DndContext>
+      </div>
+    </>
   );
 }
