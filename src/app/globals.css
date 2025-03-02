@@ -120,8 +120,22 @@
 }
 
 @font-face {
-  font-family: 'test';
-  src: url('../../public/fonts/p1.woff2') format('woff2');
+  font-family: 'qpc-v1';
+  src: url('../../public/fonts/qpc/v1/p1.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'qpc-v2';
+  src: url('../../public/fonts/qpc/v2/p1.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'chapters';
+  src: url('../../public/fonts/chapters.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
@@ -137,5 +151,6 @@
 
 
 * {
-  font-family: 'test';
+  /* font-family: 'qpc-v1'; */
+  /* font-family: 'qpc-v2'; */
 }

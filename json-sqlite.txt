@@ -1,0 +1,48 @@
+this is how my app works:
+fetch all quran chapters into a select list the user then select one
+afterwards all verses are fetched into one select list called verses-from the user then select which verse would he like to begin with
+afterwards all data (excluding the selected verse and the verses behind it) are fetched into another select called verses-to the user then select which verse he would like to end with
+
+after the chapter/verses-from/verses-to are all set the verses between verses-from and verses-to gets fetched into the main component so the user can interact with
+
+i have 3 options to fetch the data here, either use:
+- an API 
+- a JSON file
+- sqlite file
+
+which one do you recommending me going with considering the structure of my application
+
+note: i have no past experience with sqlite but if its better than both API/JSON it might as well be a good opportunity to gain experience
+
+this is the structure of the json file (this is a very small part of the file)
+when i run 
+console.log("Total Records:", Ojbect.keys(data).length); // Total Record: 83668
+so is this considered big and bad to query ?
+```JSON
+{
+  '2:286:34': { word_index: 6423, location: '2:286:34', text: 'ﳋ' },
+  '2:286:35': { word_index: 6424, location: '2:286:35', text: 'ﳌ' },
+  '2:286:36': { word_index: 6425, location: '2:286:36', text: 'ﳍ' },
+  '2:286:37': { word_index: 6426, location: '2:286:37', text: 'ﳎ' },
+  '2:286:38': { word_index: 6427, location: '2:286:38', text: 'ﳏﳐ' },
+  '2:286:39': { word_index: 6428, location: '2:286:39', text: 'ﳑ' },
+  '2:286:40': { word_index: 6429, location: '2:286:40', text: 'ﳒ' },
+  '2:286:41': { word_index: 6430, location: '2:286:41', text: 'ﳓ' },
+  '2:286:42': { word_index: 6431, location: '2:286:42', text: 'ﳔ' },
+  '2:286:43': { word_index: 6432, location: '2:286:43', text: 'ﳕﳖ' },
+  '2:286:44': { word_index: 6433, location: '2:286:44', text: 'ﳗ' },
+  '2:286:45': { word_index: 6434, location: '2:286:45', text: 'ﳘ' },
+  '2:286:46': { word_index: 6435, location: '2:286:46', text: 'ﳙ' },
+  '2:286:47': { word_index: 6436, location: '2:286:47', text: 'ﳚ' },
+  '2:286:48': { word_index: 6437, location: '2:286:48', text: 'ﳛ' },
+  '2:286:49': { word_index: 6438, location: '2:286:49', text: 'ﳜ' },
+  '2:286:50': { word_index: 6439, location: '2:286:50', text: 'ﳝ' },
+  '8:6:5': { word_index: 23781, location: '8:6:5', text: 'ﲍ' },
+  '13:37:9': { word_index: 34302, location: '13:37:9', text: 'ﲀ' }
+}
+```
+
+if you still choose JSON how to query this thing in the most effecient way possible
+
+also keep in mind that this could be deployed at the end so something like vercel can i deploy my app while using a local sqlite file ???
+also can sqlite be used with drizzle-orm or prisma ?
