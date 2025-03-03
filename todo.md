@@ -2,7 +2,7 @@
 
 # add rotation functioanlity
 
-# use normal text instead of uthmani to get a fully working search funtionality
+# normal <p> tag and asign their values to the draggable ones !!!
 
 <Selecto
 dragContainer={".big"}

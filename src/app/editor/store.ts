@@ -1,51 +1,37 @@
+import { Chapter } from "@/app/types";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
+type StoreChapter = Partial<Pick<Chapter, 'id' | 'name_simple'>>
+type Verses = {
+  from: string | number,
+  to: string | number
+}
+
 type editor = {
-  value: string | null;
-  context: "email" | "phoneNumber" | null;
-  password: string | null;
-  operation: "register" | "verify" | null;
-  redirectTo: string | null;
-  otpExists: boolean | null;
-  setContext: (context: "email" | "phoneNumber" | "username") => void;
-  setValue: (value: string) => void;
-  setPassword: (password: string) => void;
-  setOperation: (operation: "register" | "verify" | null) => void;
-  setRedirectTo: (redirectTo: string | null) => void;
-  setOtpExists: (otpExists: boolean | null) => void;
+  chapter: StoreChapter
+  setChapter: (chapter: StoreChapter) => void;
+  verses: Partial<Verses>;
+  setVerses: (verses: Verses) => void;
   reset: () => void;
 };
 
-export const useeditor = create<editor>()(
-  persist(
-    (set) => ({
-      value: null,
-      context: null,
-      password: null,
-      operation: "register",
-      redirectTo: "",
-      otpExists: false,
-      setContext: (context) => set({ context }),
-      setValue: (value) => set({ value }),
-      setPassword: (password) => set({ password }),
-      setOperation: (operation) => set({ operation }),
-      setRedirectTo: (redirectTo) => set({ redirectTo }),
-      setOtpExists: (otpExists) => set({ otpExists }),
-      reset: () => {
-        set({
-          value: null,
-          context: null,
-          password: null,
-          operation: null,
-          redirectTo: null,
-          otpExists: false,
-        });
+export const useEditorStore = create<editor>((set) => ({
+  chapter: { id: 1, name_simple: undefined },
+  setChapter: (chapter) => set({ chapter }),
+  verses: { from: 1, to: 7 },
+  setVerses: (verses) => set({ verses }),
+  
+  reset: () => {
+    set({
+      chapter: {
+        id: undefined,
+        name_simple: undefined
       },
-    }),
-    {
-      name: "auth-store", // Name of the storage key
-      storage: createJSONStorage(() => sessionStorage), // Use sessionStorage
-    },
-  ),
-);
+      verses: {
+        from: undefined,
+        to: undefined
+      }
+    });
+  },
+}));

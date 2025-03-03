@@ -7,7 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Chapter, Verse } from "@/app/types";
 // data
 import chapters from "@/lib/data/surah.json";
-import verses from '@/lib/data/uthmani.json'
+import verses from '@/lib/data/simple.json'
+import CardLayout from "@/components/card-layout";
+import { useEditorStore } from "@/app/editor/store";
 
 function VerseSelector({
   chapterId,
@@ -25,15 +27,15 @@ function VerseSelector({
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<Verse>();
 
-  // Memoize filtered verses to avoid recalculation on each render
+  const setChapter = useEditorStore((state) => state.setChapter)
+  const setVerses = useEditorStore((state) => state.setVerses)
+
   const filteredVerses = useMemo(() => {
     return Object.values(verses).filter((verse) => {
       const chapterNumber = verse.verse_key.split(':')[0];
       
-      // Filter by chapter
       if (chapterNumber !== chapterId.toString()) return false;
       
-      // Additional filtering for "to" verse selector
       if (fromVerseId !== undefined) {
         return verse.id >= parseInt(fromVerseId.toString());
       }
@@ -42,14 +44,23 @@ function VerseSelector({
     });
   }, [chapterId, fromVerseId]);
 
-  // Handle selection with useCallback to prevent recreating on each render
   const handleSelect = useCallback((verse: Verse) => {
     setSelected(verse);
     setOpen(false);
     onVerseSelect(verse);
+
+    if(fromVerseId !== undefined) {
+      setChapter({
+        id: chapterId,
+        name_simple: ''
+      })
+      setVerses({
+        from: fromVerseId,
+        to: verse.id
+      })
+    }
   }, [onVerseSelect]);
 
-  // Reset selection when dependencies change
   useEffect(() => {
     setSelected(undefined);
     onVerseSelect(undefined);
@@ -63,22 +74,25 @@ function VerseSelector({
           className="w-64 cursor-pointer"
           disabled={disabled}
         >
-          {selected ? selected.text : placeholder}
+          {selected ? selected.verse_key.split(':')[1] : placeholder}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-64 p-0">
         <Command>
           <CommandInput placeholder="Search verses..." />
           <CommandList>
-            {filteredVerses.map((verse) => (
-              <CommandItem
-                key={verse.id}
-                value={verse.text}
-                onSelect={() => handleSelect(verse)}
-              >
-                {verse.verse_key.split(':')[1]} - {verse.text}
-              </CommandItem>
-            ))}
+            {filteredVerses.map((verse) => {
+              const verseNumber = verse.verse_key.split(':')[1]
+              return (
+                <CommandItem
+                  key={verse.id}
+                  value={`${verseNumber} ${verse.text}`}
+                  onSelect={() => handleSelect(verse)}
+                >
+                  {verseNumber} - {verse.text}
+                </CommandItem>
+              )
+            })}
           </CommandList>
         </Command>
       </PopoverContent>
@@ -92,7 +106,6 @@ export default function ChapterSelector() {
   const [fromVerse, setFromVerse] = useState<Verse>();
   const [toVerse, setToVerse] = useState<Verse>();
 
-  // Handle chapter selection with useCallback
   const handleChapterSelect = useCallback((chapter: Chapter) => {
     setSelected(chapter);
     setFromVerse(undefined);
@@ -101,7 +114,7 @@ export default function ChapterSelector() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-5">
+    <CardLayout title="Select Chapter - Verses" parentClassName="h-full" className="flex flex-col gap-5">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="outline" className="w-64 cursor-pointer">
@@ -143,6 +156,6 @@ export default function ChapterSelector() {
           onVerseSelect={setToVerse}
         />
       )}
-    </div>
+    </CardLayout>
   );
 }

@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* <Script src="//unpkg.com/react-scan/dist/auto.global.js" strategy="afterInteractive" /> */}
+        <Script src="//unpkg.com/react-scan/dist/auto.global.js" strategy="afterInteractive" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

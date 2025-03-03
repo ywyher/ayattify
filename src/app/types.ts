@@ -1,15 +1,20 @@
 export type Item = {
-  id: string,
+  id: string;
   position: {
-    x: number,
-    y: number,
-  },
+    x: number;
+    y: number;
+  };
   size: {
-    width: string,
-    height: string,
-  },
+    width: string;
+    height: string;
+  };
   rotation: number
   content: string 
+  font?: {
+    src: string;
+    type: string;
+    name: string;
+  }
 }
 
 export type Selected = {
@@ -29,12 +34,12 @@ export type isDragging = {
 }
 
 export type Chapter = {
-  id: string | number,
-  name: string | number,
-  name_simple: string,
-  revelation_order: string | number,
-  revelation_place: string,
-  verses_count: string | number,
+  id: string | number;
+  name: string | number;
+  name_simple: string;
+  revelation_order: string | number;
+  revelation_place: string;
+  verses_count: string | number;
   pages_range: string
 }
 

@@ -41,6 +41,7 @@ function Draggable({
     zIndex: isDragging?.id === item.id ? 999 : isSelected ? 100 : 1,
     border: (isSelected || isHover) ? '2px solid blue' : '2px solid transparent',
     transformOrigin: 'center center',
+    fontFamily: (item.font && item.font.name) ? `${item.font.name}` : ''
   }), [item.id, isDragging?.id, isSelected, isHover]);
 
   const [editableContent, setEditableContent] = useState<string>(item.content)
@@ -156,7 +157,6 @@ function Draggable({
       style={{...style}}
       minHeight={50}
       minWidth={50}
-      className="bg-violet-500"
       data-draggable={true}
       onMouseDown={handleMouseDown}
       onMouseEnter={handleMouseEnter}
