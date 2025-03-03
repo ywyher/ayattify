@@ -1,0 +1,104 @@
+> [!warning]
+open with obsidian for ultimate experience
+
+# What is ayattify
+its an app i have been wanting to build for the past 3 years each time i started it the development stopped due to me not having the required experience, but now i surely i can
+
+this is how the app works:
+fetch all Quran chapters into a select list the user then select one
+afterwards all verses are fetched into one select list called verses-from the user then select which verse would he like to begin with
+afterwards all data **(excluding the selected verse and the verses behind it)** are fetched into another select called verses-to the user then select which verse he would like to end with
+
+after the chapter/verses-from/verses-to are all set the verses between verses-from and verses-to gets fetched into the main component so the user can interact with the app by:
+- editing the style of each verse (hopefully words too)
+- editing the main component (the background for the verses)
+- choosing between multiple themes
+- custom backgrounds
+- images
+and a lot more
+
+each component we have here from the verses to the background component for the canvas is a Draggable/Resizable/Rotatable
+
+# Libraries
+
+- [Draggable/Resizable components with react-rnd](https://github.com/bokuweb/react-rnd)
+- Rotatation functionality is implemented by us using React
+- [Selecto](https://github.com/daybrush/selecto) for selecting multiple components and interacting with the at once **(not implemented yet)**
+
+> [!note]
+> for draggable/resizable component you can combine these two:
+> - [dnd-kit](https://github.com/clauderic/dnd-kit)
+> - [re-resizable](https://github.com/bokuweb/re-resizable)
+>   
+> its a solid solution **(only if you need more advanced functionalities from dnd-kit)** but due to me being inexperienced couldn't get it to work with good performance while having multiple draggable components at once (which is a key feature in our app)
+
+> [!note]
+> [Moveable](https://github.com/daybrush/moveable) is a pretty solid library too and it have a lot of required features for our app (even ones i didn't even implement yet due to how tricky they are) 
+> The reason i didn't use it tho is because it's haven't had a single commit in 2 years (basically not maintained)
+> Also not sure whether it works with react-19 or as well
+>
+btw iam aware that iam using [Selecto](https://github.com/daybrush/selecto) which is from the same dev and haven't been maintained as well but due to its functionality being not as crucial to me as the other ones i didn't mind using it **(also didn't find any alternatives till now)**
+
+# Quranic 
+## Fonts
+there are multiple types of Quranic font most notably:
+- [Uthmani hafs](https://qul.tarteel.ai/mushaf_layouts/5)
+- [Indopak](https://qul.tarteel.ai/mushaf_layouts/6)
+- QPC (**main**)
+
+QPC is a font used on a glyph code which is character that resemble a specific word or character after applying the font, we have 3 versions of it:
+- [v1](https://qul.tarteel.ai/mushaf_layouts/2) -> handwritten (**secondary**)
+- [v2](https://qul.tarteel.ai/mushaf_layouts/1) -> **main one**
+- [v4 tajweed]https://qul.tarteel.ai/mushaf_layouts/19
+
+these are all you need to know about fonts to create this application
+
+### Where to install fonts from ?
+- [main page](https://qul.tarteel.ai/resources/font)
+	- [QPC V1](https://qul.tarteel.ai/resources/font/238)
+	- [QPC v2](https://qul.tarteel.ai/resources/font/249)
+	- [Surah names](https://qul.tarteel.ai/resources/font/237) (still don't know how to use it) -> looks good
+
+- [Surah names quran.com](https://quran.com/fonts/quran/surah-names/v1/sura_names.woff2) (using this one for now) -> looks bad
+
+## Scripts
+you can either choose between using an API or local JSON/sqlite
+- [quran.com API](https://api-docs.quran.com/docs/category/quran.com-api)
+- [JSON/sqlite](https://qul.tarteel.ai/resources/quran-script)
+
+the scripts i used are (**main**)
+- [QPC V2 Glyphs - Ayah by Ayah](https://qul.tarteel.ai/resources/quran-script/80)
+- [QPC V1 Glyphs - Ayah by Ayah](https://qul.tarteel.ai/resources/quran-script/81)
+
+more useful ones:
+- [QPC V2 Glyph - Word by Word](https://qul.tarteel.ai/resources/quran-script/61)
+- [QPC V1 Glyphs - Word by Word](https://qul.tarteel.ai/resources/quran-script/57)
+
+> [!note]
+> the difference between Word by Word and Ayah by Ayah:
+>
+> Ayah by Ayah contains the records of each ayah in the Quran on its own containing all of its words and symbols allowing for:
+> - pros
+> 	- smaller file (~1mb)
+> 	- WAY less records: 6000
+> 	- faster on the client side
+> 	- faster to query data
+> - cons: 
+> 	- less customization (can't edit styling for word by word) -> not sure yet to figure if its possible or no
+> 
+> Word by Word contains the records of each wsymbol in the Quran on its own:
+> - pros
+> 	- can customize eacord/h word styling on its own (not sure if its possible with ayah by ayah or)
+> - cons
+> 	- huge amounts of records: 80000
+> 	- big file size (~5mb)
+> 	- slower on the client side
+> 	- slower to query data
+>
+> td;lr:
+> just use ayah by ayah format, the trade offs for word by word aren't worth it
+
+## Resources
+https://qul.tarteel.ai/
+https://api-docs.quran.com/docs/category/quran.com-api
+https://qul.tarteel.ai/community/chars_info (test fonts on the fly

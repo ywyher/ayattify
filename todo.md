@@ -2,6 +2,8 @@
 
 # add rotation functioanlity
 
+# use normal text instead of uthmani to get a fully working search funtionality
+
 <Selecto
 dragContainer={".big"}
 selectableTargets={[".big .draggable"]}
