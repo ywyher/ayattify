@@ -21,7 +21,6 @@ export default function DraggableContainer({
   const [selected, setSelected] = useState<Selected | undefined>();
   const [isDragging, setIsDragging] = useState<isDragging | undefined>();
   const [editing, setEditing] = useState<Editing | undefined>();
-  const containerRef = useRef<HTMLDivElement>(null);
   const leaderRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = useCallback((event: MouseEvent) => {
@@ -42,9 +41,10 @@ export default function DraggableContainer({
   }, [handleClickOutside]);
   
   return (
-    <div ref={containerRef} className="relative w-full h-full min-h-[300px]">
+    <div 
+      className="absolute top-0 left-0" 
+    >
       {items.map(item => (
-        // <p ref={leaderRef}>
           <Draggable
             key={item.id}    
             item={item}
@@ -59,7 +59,6 @@ export default function DraggableContainer({
             editing={editing}
             editable={editable}
           />
-        // </p>
       ))}
     </div>
   );

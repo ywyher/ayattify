@@ -17,9 +17,9 @@ type editor = {
 };
 
 export const useEditorStore = create<editor>((set) => ({
-  chapter: { id: 1, name_simple: undefined },
+  chapter: { id: undefined, name_simple: undefined },
   setChapter: (chapter) => set({ chapter }),
-  verses: { from: 1, to: 7 },
+  verses: { from: undefined, to: undefined },
   setVerses: (verses) => set({ verses }),
   
   reset: () => {

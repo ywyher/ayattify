@@ -37,7 +37,7 @@ function Draggable({
   const style = useMemo(() => ({
     boxShadow: item.id === isDragging?.id ? '0px 4px 10px rgba(0, 0, 0, 0.2)' : 'none',
     transition: item.id === isDragging?.id ? 'box-shadow 0.2s ease-in-out' : 'none',
-    position: 'absolute' as const,
+    position: `absolute` as const,
     zIndex: isDragging?.id === item.id ? 999 : isSelected ? 100 : 1,
     border: (isSelected || isHover) ? '2px solid blue' : '2px solid transparent',
     transformOrigin: 'center center',
@@ -112,8 +112,8 @@ function Draggable({
             ...prevItem,
             position,
             size: {
-              width: `${ref.offsetWidth}px`,
-              height: `${ref.offsetHeight}px`,
+              width: `${ref.offsetWidth}`,
+              height: `${ref.offsetHeight}`,
             }
           }
         : prevItem
@@ -155,8 +155,8 @@ function Draggable({
         height: item.size.height,
       }}
       style={{...style}}
-      minHeight={50}
-      minWidth={50}
+      // minHeight={50}
+      // minWidth={50}
       data-draggable={true}
       onMouseDown={handleMouseDown}
       onMouseEnter={handleMouseEnter}

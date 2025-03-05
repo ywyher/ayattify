@@ -2,7 +2,7 @@
 
 # add rotation functioanlity
 
-# normal <p> tag and asign their values to the draggable ones !!!
+# width position doesnt always set right !!!
 
 <Selecto
 dragContainer={".big"}

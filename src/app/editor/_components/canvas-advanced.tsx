@@ -113,7 +113,7 @@ const handlePositionsReady = useCallback((positions: {id: string, x: number, y: 
           ))}
           
 
-            {/* Hidden flow positioner */}
+        {/* Hidden flow positioner */}
         <FlowPositioner items={items} onPositionsReady={handlePositionsReady} />
         
           
